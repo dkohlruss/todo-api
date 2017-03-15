@@ -4,12 +4,12 @@ const bcrypt = require('bcryptjs');
 
 let password = '123abc!';
 
-// bcrypt.genSalt(10, (err, salt) => {
-//   bcrypt.hash(password, salt, (err, hash) => {
-//     console.log("the hashed and salted pw is : " + hash);
-//   })
-// 
-// });
+bcrypt.genSalt(10, (err, salt) => {
+  bcrypt.hash(password, salt, (err, hash) => {
+    console.log("the hashed and salted pw is : " + hash);
+  })
+
+});
 
 let hashedPassword = '$2a$10$WAw8dFaT6rRNiEQ/w6GUb.lH96lsNglQrfg5yDoFR7ITjqGGZZUQm';
 

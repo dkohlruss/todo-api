@@ -9,6 +9,7 @@ const {mongoose} = require('./db/mongoose');
 const {Todo} = require('./models/todo');
 const {User} = require('./models/user');
 const {authenticate} = require('./middleware/authenticate');
+const bcrypt = require('bcryptjs');
 
 let app = express();
 const port = process.env.PORT;
@@ -28,22 +29,25 @@ app.post('/users', (req, res) => {
     res.status(400).send(err);
   })
 });
-//
-// let authenticate = (req, res, next) => {
-//   let token = req.header('x-auth');
-//
-//   User.findByToken(token).then((user) => {
-//     if (!user) {
-//       return Promise.reject();
-//     }
-//
-//     req.user = user;
-//     req.token = token;
-//     next();
-//   }).catch((e) => {
-//     res.status(401).send();
-//   })
-// };
+
+app.post('/users/login', (req, res) => {
+  let body = _.pick(req.body, ['email', 'password']);
+
+  User.findByCredentials(body.email, body.password).then((user) => {
+    return user.generateAuthToken().then((token) => {
+      res.header('x-auth', token).send(user);
+    })
+  }).catch((err) => {
+    res.status(400).send();
+  });
+
+  //   res.send(user);
+  // }).catch((err) => {
+  //   res.status(400).send();
+  // });
+  // match email, match hashed password to hash in DB
+  //bcrypt.decode etc
+});
 
 app.get('/users/me', authenticate, (req, res) => {
   res.send(req.user);
