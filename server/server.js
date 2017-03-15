@@ -27,7 +27,7 @@ app.post('/users', (req, res) => {
     res.header('x-auth', token).send(user);
   }).catch((err) => {
     res.status(400).send(err);
-  })
+  });
 });
 
 app.post('/users/login', (req, res) => {
@@ -40,13 +40,6 @@ app.post('/users/login', (req, res) => {
   }).catch((err) => {
     res.status(400).send();
   });
-
-  //   res.send(user);
-  // }).catch((err) => {
-  //   res.status(400).send();
-  // });
-  // match email, match hashed password to hash in DB
-  //bcrypt.decode etc
 });
 
 app.get('/users/me', authenticate, (req, res) => {
