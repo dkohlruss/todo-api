@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const _ = require('lodash');
 
 const {mongoose} = require('./db/mongoose');
 const {Todo} = require('./models/todo');
@@ -24,11 +25,34 @@ app.post('/todos', (req, res) => {
   });
 });
 
+app.post('/users', (req, res) => {
+  let body = _.pick(req.body, ['email', 'password']);
+  let user = new User(body);
+
+  user.save().then(() => {
+    return user.generateAuthToken();
+  }).then((token) => {
+    res.header('x-auth', token).send(user);
+  }).catch((e) => {
+    res.status(400).send(e);
+  });
+});
+
 app.get('/todos', (req, res) => {
   Todo.find().then((todos) => {
     res.send({
       todos
     });
+  }, (err) => {
+    res.status(400).send(err);
+  });
+});
+
+app.get('/todos/:id', (req, res) => {
+  let id = req.params.id;
+
+  Todo.findById(id).then((todo) => {
+    res.send({todo});
   }, (err) => {
     res.status(400).send(err);
   });
