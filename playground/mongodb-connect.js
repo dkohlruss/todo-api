@@ -1,8 +1,15 @@
+// Object destructuring -- This pulls these out into variables
 const {MongoClient, ObjectID} = require('mongodb');
 // const MongoClient = require('mongodb').MongoClient;
 
 let obj = new ObjectID();
 console.log(obj);
+// This will print out a new object ID.
+
+// Object destructuring example:
+let blob = {name: "tane"};
+let {name} = blob;
+console.log(name); // This will print out 'tane'.
 
 MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => {
   if (err) {
@@ -10,8 +17,10 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => {
   }
   console.log(`Connected to MongoDB server`);
 
+  // This inserts one object into the collection given
+
   // db.collection('Todos').insertOne({
-  //   text: 'Something to do',
+  //   text: 'Something to do!',
   //   completed: false
   // }, (err, result) => {
   //   if (err) {
@@ -20,7 +29,7 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => {
   //
   //   console.log(JSON.stringify(result.ops, undefined, 2));
   // });
-
+  //
   // db.collection('Users').insertOne({
   //   name: 'David',
   //   age: 32,
@@ -31,8 +40,7 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => {
   //   }
   //
   //   console.log(result.ops[0]._id.getTimestamp());
-
-  });
+  // });
 
   db.close();
 });
