@@ -77,17 +77,37 @@ UserSchema.statics.findByToken = function(token) {
   });
 };
 
+UserSchema.statics.findByCreds = function(email, password) {
+  let User = this;
+
+  // Find user first...
+  return User.findOne({
+    'email': email
+  }).then((user) => {
+    if (!user) {
+      return Promise.reject();
+    }
+
+    return new Promise((resolve, reject) => {
+      bcrypt.compare(password, user.password, (err, result) => {
+        if (result) {
+          resolve(user);
+        } else {
+          reject();
+        }
+      });
+    })
+  });
+};
+
 UserSchema.pre('save', function(next) {
   // next needs to be provided as called
   let user = this;
 
   if (user.isModified('password')) { // if the password is modified
-    // gen salt and hash it!
-    // user.password = pw variable
-    // hash user.password and set it to user.password
+    // gen salt and hash user.password
     // then call next
     let password = user.password;
-    console.log(password);
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(password, salt, (err, hash) => {
           user.password = hash;
