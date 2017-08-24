@@ -59,6 +59,18 @@ UserSchema.methods.toJSON = function() {
   return _.pick(userObject, ['_id', 'email']);
 };
 
+UserSchema.methods.removeToken = function(token) {
+  let user = this;
+
+  return user.update({
+    $pull: {
+      tokens: {
+        token: token
+      }
+    }
+  })
+};
+
 // Model Methods on big U User
 UserSchema.statics.findByToken = function(token) {
   let User = this;
